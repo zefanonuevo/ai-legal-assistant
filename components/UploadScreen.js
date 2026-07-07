@@ -12,14 +12,17 @@ export default function UploadScreen({ lang, setLang, status, errorMsg, onFile }
   const [selectedFile, setSelectedFile] = useState(null);
   const [localError, setLocalError] = useState("");
   const [messageIndex, setMessageIndex] = useState(0);
+  const [prevLoading, setPrevLoading] = useState(false);
   const inputRef = useRef(null);
   const isLoading = status === "loading";
 
+  if (isLoading !== prevLoading) {
+    setPrevLoading(isLoading);
+    setMessageIndex(0);
+  }
+
   useEffect(() => {
-    if (!isLoading) {
-      setMessageIndex(0);
-      return;
-    }
+    if (!isLoading) return;
     const id = setInterval(() => {
       setMessageIndex((i) => (i + 1) % t.loadingMessages.length);
     }, 2200);
